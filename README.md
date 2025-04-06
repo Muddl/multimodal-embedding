@@ -18,7 +18,7 @@ This project demonstrates how to create multimodal embeddings from video content
 
 ## Requirements
 
-- Python >= 3.8
+- Python >= 3.12
 - uv package manager
 
 ## Installation
@@ -60,81 +60,16 @@ source .venv/bin/activate
 uv pip install -r requirements.txt
 ```
 
-### 4. Set up pyproject.toml (optional for project management):
-
-```toml
-[project]
-name = "multimodal-video-embedding"
-version = "0.1.0"
-description = "Multimodal Video Embedding for RAG Applications"
-readme = "README.md"
-requires-python = ">=3.8"
-license = {text = "MIT"}
-dependencies = [
-    "torch>=2.0.0",
-    "transformers>=4.30.0",
-    "pytube>=15.0.0",
-    "opencv-python>=4.8.0",
-    "numpy>=1.24.0",
-    "openai-whisper>=20231117",
-    "chromadb>=0.4.22",
-    "sentence-transformers>=2.2.2",
-]
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-```
-
 ## Usage
 
 ### Running with uv
 
 ```bash
 # Run the main script
-uv run src/main.py
+uv run embeddings.py
 
 # Run with specific Python version
 uv run --python=3.10 src/main.py
-```
-
-### Basic Code Usage
-
-```python
-from video_embedding import download_video, extract_video_frames, extract_audio_transcript
-from video_embedding import generate_visual_embeddings, generate_text_embeddings, fusion_embeddings
-from video_embedding import store_in_vectordb, query_video_rag
-
-# Download a video
-video_path, video_title = download_video("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
-
-# Extract features
-frames, timestamps = extract_video_frames(video_path, sample_rate=2)
-transcripts = extract_audio_transcript(video_path)
-
-# Generate embeddings
-visual_embeddings = generate_visual_embeddings(frames)
-text_embeddings = generate_text_embeddings(transcripts)
-
-# Fuse modalities
-multimodal_embeddings, metadata = fusion_embeddings(
-    visual_embeddings, text_embeddings, timestamps, transcripts
-)
-
-# Store in vector database
-collection = store_in_vectordb(
-    multimodal_embeddings, metadata, f"video_{video_title.replace(' ', '_')}"
-)
-
-# Query the database
-results = query_video_rag("dancing in the video", collection)
-
-# Print results
-for i, result in enumerate(results):
-    print(f"Result {i+1}:")
-    print(f"  Timestamp: {result['timestamp']}")
-    print(f"  Text: {result['text']}")
-    print(f"  Similarity: {result['similarity']}")
 ```
 
 ## Development
